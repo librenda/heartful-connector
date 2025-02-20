@@ -5,44 +5,22 @@ export interface Contact {
   lastName: string;
   email: string;
   phone?: string;
-  company?: string;
-  role?: string;
   
-  // Physical features
-  physicalFeatures?: {
-    height?: string;
-    build?: string;
-    hairColor?: string;
-    eyeColor?: string;
-    distinguishingFeatures?: string;
+  // Professional context (deemphasized)
+  professionalContext?: {
+    company?: string;
+    role?: string;
   };
   
-  // Personal items and accessories
-  accessories?: {
-    jewelry?: string[];
-    clothing?: string;
-    gadgets?: string[];
-    other?: string[];
-  };
-  
-  // Dreams and aspirations
-  dreams?: {
-    personal?: string[];
-    professional?: string[];
-    shortTerm?: string[];
-    longTerm?: string[];
-  };
-  
-  // Personal details
-  personalDetails?: {
-    birthday?: string;
-    interests?: string[];
+  // Personal journey
+  journey?: {
+    dreams?: string[];
     values?: string[];
-    familyStatus?: string;
-    education?: string;
+    interests?: string[];
+    aspirations?: string[];
   };
   
-  // Personal preferences and notes
+  // Important contexts
   preferences?: {
     dietary?: string[];
     cultural?: string[];
@@ -50,13 +28,22 @@ export interface Contact {
     general?: string[];
   };
   
-  // ICP (Ideal Customer Profile) data
-  icp?: {
-    painPoints?: string[];
-    goals?: string[];
-    budget?: string;
-    decisionMaking?: string;
-    timeline?: string;
+  // Meaningful dates
+  significantDates?: {
+    birthday?: string;
+    anniversary?: string;
+    customDates?: Array<{
+      date: string;
+      description: string;
+    }>;
+  };
+  
+  // Relationship notes
+  relationshipNotes?: {
+    meetingContext?: string;
+    sharedExperiences?: string[];
+    mutualConnections?: string[];
+    interests?: string[];
   };
   
   // Updates and interaction history
@@ -65,6 +52,7 @@ export interface Contact {
     content: string;
     type: "meeting" | "call" | "email" | "note" | "other";
     followUp?: string;
+    sentiment?: "positive" | "neutral" | "needs-attention";
   }[];
   
   createdAt: string;
