@@ -1,3 +1,4 @@
+
 import { Contact } from "../types/contact";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
@@ -40,6 +41,62 @@ export const ContactCard = ({ contact, onEdit, onDelete }: ContactCardProps) => 
         </div>
       </div>
       
+      {/* Latest Interaction & Follow-up */}
+      {contact.updates && contact.updates.length > 0 && (
+        <div className="mb-6 p-4 bg-crm-hover rounded-lg">
+          <p className="text-xs text-crm-muted mb-2">Latest Interaction</p>
+          <div className="text-sm text-crm-text space-y-2">
+            <p>{contact.updates[0].content}</p>
+            {contact.updates[0].followUp && (
+              <p className="text-crm-accent">
+                Follow-up: {contact.updates[0].followUp}
+              </p>
+            )}
+            <span className="text-crm-muted text-xs">
+              {new Date(contact.updates[0].date).toLocaleDateString()}
+            </span>
+          </div>
+        </div>
+      )}
+      
+      {/* Personal Preferences */}
+      {contact.preferences && (
+        Object.entries(contact.preferences).some(([_, values]) => values && values.length > 0) && (
+          <div className="mb-4">
+            <p className="text-xs text-crm-muted mb-2">Preferences & Notes</p>
+            <div className="space-y-2">
+              {contact.preferences.dietary && contact.preferences.dietary.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {contact.preferences.dietary.map((pref, index) => (
+                    <Badge key={index} variant="secondary" className="bg-rose-50 text-rose-700">
+                      {pref}
+                    </Badge>
+                  ))}
+                </div>
+              )}
+              {contact.preferences.cultural && contact.preferences.cultural.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {contact.preferences.cultural.map((pref, index) => (
+                    <Badge key={index} variant="secondary" className="bg-violet-50 text-violet-700">
+                      {pref}
+                    </Badge>
+                  ))}
+                </div>
+              )}
+              {contact.preferences.general && contact.preferences.general.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {contact.preferences.general.map((note, index) => (
+                    <Badge key={index} variant="secondary" className="bg-blue-50 text-blue-700">
+                      {note}
+                    </Badge>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )
+      )}
+      
       {contact.icp?.painPoints && contact.icp.painPoints.length > 0 && (
         <div className="mb-4">
           <p className="text-xs text-crm-muted mb-2">Pain Points</p>
@@ -62,18 +119,6 @@ export const ContactCard = ({ contact, onEdit, onDelete }: ContactCardProps) => 
                 {dream}
               </Badge>
             ))}
-          </div>
-        </div>
-      )}
-      
-      {contact.updates && contact.updates.length > 0 && (
-        <div className="mt-6">
-          <p className="text-xs text-crm-muted mb-2">Latest Update</p>
-          <div className="text-sm text-crm-text">
-            {contact.updates[0].content}
-            <span className="text-crm-muted ml-2">
-              {new Date(contact.updates[0].date).toLocaleDateString()}
-            </span>
           </div>
         </div>
       )}

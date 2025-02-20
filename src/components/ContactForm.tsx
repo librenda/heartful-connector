@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Contact } from "../types/contact";
 import { Button } from "./ui/button";
@@ -31,6 +32,11 @@ export const ContactForm = ({ initialData, onSubmit, onCancel }: ContactFormProp
       personalDetails: {
         interests: [],
       },
+      preferences: {
+        dietary: [],
+        cultural: [],
+        general: [],
+      },
       icp: {
         painPoints: [],
         goals: [],
@@ -55,7 +61,7 @@ export const ContactForm = ({ initialData, onSubmit, onCancel }: ContactFormProp
   };
 
   const handleArrayInput = (
-    category: "dreams" | "icp",
+    category: "dreams" | "icp" | "preferences",
     subCategory: string,
     value: string
   ) => {
@@ -65,6 +71,21 @@ export const ContactForm = ({ initialData, onSubmit, onCancel }: ContactFormProp
         ...prev[category],
         [subCategory]: [...(prev[category]?.[subCategory] || []), value],
       },
+    }));
+  };
+
+  const handleUpdateInput = (content: string, followUp?: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      updates: [
+        {
+          date: new Date().toISOString(),
+          content,
+          type: "note",
+          followUp,
+        },
+        ...(prev.updates || []),
+      ],
     }));
   };
 
@@ -86,6 +107,7 @@ export const ContactForm = ({ initialData, onSubmit, onCancel }: ContactFormProp
           </Button>
         </div>
 
+        {/* Basic Information */}
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="firstName">First Name</Label>
@@ -147,6 +169,83 @@ export const ContactForm = ({ initialData, onSubmit, onCancel }: ContactFormProp
           </div>
         </div>
 
+        {/* Interaction & Follow-up */}
+        <div className="space-y-4">
+          <Label>New Interaction</Label>
+          <div className="space-y-2">
+            <Textarea
+              placeholder="Add interaction details"
+              className="border-crm-border focus:border-crm-accent mb-2"
+              onKeyPress={(e) => {
+                if (e.key === "Enter" && e.shiftKey) {
+                  e.preventDefault();
+                  const target = e.target as HTMLTextAreaElement;
+                  handleUpdateInput(target.value);
+                  target.value = "";
+                }
+              }}
+            />
+            <Textarea
+              placeholder="Add follow-up notes (optional)"
+              className="border-crm-border focus:border-crm-accent"
+              onKeyPress={(e) => {
+                if (e.key === "Enter" && e.shiftKey) {
+                  e.preventDefault();
+                  const target = e.target as HTMLTextAreaElement;
+                  const lastUpdate = formData.updates?.[0];
+                  if (lastUpdate) {
+                    handleUpdateInput(lastUpdate.content, target.value);
+                    target.value = "";
+                  }
+                }
+              }}
+            />
+            <p className="text-xs text-crm-muted">Press Shift+Enter to save</p>
+          </div>
+        </div>
+
+        {/* Preferences */}
+        <div className="space-y-4">
+          <Label>Personal Preferences</Label>
+          <Textarea
+            placeholder="Add dietary preferences (press Enter to add)"
+            className="border-crm-border focus:border-crm-accent mb-2"
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                const target = e.target as HTMLTextAreaElement;
+                handleArrayInput("preferences", "dietary", target.value);
+                target.value = "";
+              }
+            }}
+          />
+          <Textarea
+            placeholder="Add cultural preferences (press Enter to add)"
+            className="border-crm-border focus:border-crm-accent mb-2"
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                const target = e.target as HTMLTextAreaElement;
+                handleArrayInput("preferences", "cultural", target.value);
+                target.value = "";
+              }
+            }}
+          />
+          <Textarea
+            placeholder="Add general notes/preferences (press Enter to add)"
+            className="border-crm-border focus:border-crm-accent"
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                const target = e.target as HTMLTextAreaElement;
+                handleArrayInput("preferences", "general", target.value);
+                target.value = "";
+              }
+            }}
+          />
+        </div>
+
+        {/* Dreams & Goals */}
         <div className="space-y-4">
           <Label>Dreams & Goals</Label>
           <Textarea
@@ -163,6 +262,7 @@ export const ContactForm = ({ initialData, onSubmit, onCancel }: ContactFormProp
           />
         </div>
 
+        {/* Pain Points */}
         <div className="space-y-4">
           <Label>Pain Points</Label>
           <Textarea

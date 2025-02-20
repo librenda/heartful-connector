@@ -1,3 +1,4 @@
+
 export interface Contact {
   id: string;
   firstName: string;
@@ -41,6 +42,14 @@ export interface Contact {
     education?: string;
   };
   
+  // Personal preferences and notes
+  preferences?: {
+    dietary?: string[];
+    cultural?: string[];
+    communication?: string[];
+    general?: string[];
+  };
+  
   // ICP (Ideal Customer Profile) data
   icp?: {
     painPoints?: string[];
@@ -55,6 +64,7 @@ export interface Contact {
     date: string;
     content: string;
     type: "meeting" | "call" | "email" | "note" | "other";
+    followUp?: string;
   }[];
   
   createdAt: string;
